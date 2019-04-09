@@ -3,7 +3,7 @@ import React from 'react';
 const Card = (props) => {
   const imageStyle = {
     background: 'lightgray',
-    height: 100%;
+    height: '100%'
   }
   return (
     <div className="card">
