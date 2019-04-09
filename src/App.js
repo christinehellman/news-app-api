@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import CardList from './components/Card/CardList';
+import Form from './components/Form/Form';
+import {API_KEY, fetchGetNews} from './fetch';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: [],
+    }
+  }
+
+ componentDidMount() {
+   fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => this.setState({ articles: data.articles }));
+  }
+
+  updateSource = ({ source }) => {
+    fetchGetNews(`${source}`)
+    .then(response => response.json())
+    .then(({articles}) => {
+      this.setState({articles})
+    })
+  }
+
+
+
+
+
   render() {
+    const { articles } = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Form updateSource={this.updateSource} />
+        <CardList articles={articles} />
+        <small>Powered by <a href="https://newsapi.org" target="_blank" rel="noopener noreferrer">newsapi.org</a></small>
       </div>
     );
   }
